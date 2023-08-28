@@ -1,4 +1,6 @@
 ﻿using Books.DataAccess.Data;
+using Books.DataAccess.Repository;
+using Books.DataAccess.Repository.IRepository;
 using Books.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,15 +8,15 @@ namespace Books.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext _db;
-        public CategoryController(ApplicationDbContext db)
+        private readonly ICategoryRepository _categoryRepository;
+        public CategoryController(ICategoryRepository categoryRepository)
         {
-            _db = db;
+            _categoryRepository = categoryRepository;
         }
 
         public IActionResult Index()
         {
-            IEnumerable<Category> categoryList = _db.Categories.ToList();
+            IEnumerable<Category> categoryList = _categoryRepository.GetAll();
             return View(categoryList);
         }
 
@@ -28,16 +30,16 @@ namespace Books.Controllers
         {
             if(ModelState.IsValid)
             {
-                _db.Categories.Add(category);
-                _db.SaveChanges();
+                _categoryRepository.Add(category);
+                _categoryRepository.Save();
                 return RedirectToAction("Index");
             }
-            return View(/*category*/);
+            return View();
         }
 
         public IActionResult Edit(int id)
         {
-            Category category = _db.Categories.SingleOrDefault(c => c.Id == id);
+            Category category = _categoryRepository.Get(id);
             return View(category);
         }
 
@@ -46,8 +48,8 @@ namespace Books.Controllers
         {
             if(ModelState.IsValid)
             {
-                _db.Categories.Update(category);
-                _db.SaveChanges();
+                _categoryRepository.Update(category);
+                _categoryRepository.Save();
                 return RedirectToAction("Index");
             }
             return View();
@@ -63,8 +65,7 @@ namespace Books.Controllers
         [HttpPost]
         public IActionResult Delete(int id)
         {
-            _db.Categories.Remove(_db.Categories.SingleOrDefault(c => c.Id == id));
-            _db.SaveChanges();
+            Category category = _categoryRepository.Get(id);
             return RedirectToAction("Index");
         }
     }
