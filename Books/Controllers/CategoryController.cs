@@ -1,6 +1,4 @@
-﻿using Books.DataAccess.Data;
-using Books.DataAccess.Repository;
-using Books.DataAccess.Repository.IRepository;
+﻿using Books.DataAccess.Repository.IRepository;
 using Books.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,8 +14,8 @@ namespace Books.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<Category> categoryList = _categoryRepository.GetAll();
-            return View(categoryList);
+            IEnumerable<Category> categories = _categoryRepository.GetAll();
+            return View(categories);
         }
 
         public IActionResult Create()
@@ -39,7 +37,7 @@ namespace Books.Controllers
 
         public IActionResult Edit(int id)
         {
-            Category category = _categoryRepository.Get(id);
+            Category category = _categoryRepository.Get(u => u.Id == id);
             return View(category);
         }
 
@@ -55,17 +53,18 @@ namespace Books.Controllers
             return View();
         }
 
-        /*public IActionResult Delete(int id)
-        {
-            // Get the category to delete
-            Category category = _db.Categories.SingleOrDefault(c => c.Id ==id);
-            return View(category);
-        }*/
-
-        [HttpPost]
         public IActionResult Delete(int id)
         {
-            Category category = _categoryRepository.Get(id);
+            // Get the category to delete
+            Category category = _categoryRepository.Get(u => u.Id == id);
+            return View(category);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(Category category)
+        {
+            _categoryRepository.Remove(category);
+            _categoryRepository.Save();
             return RedirectToAction("Index");
         }
     }
