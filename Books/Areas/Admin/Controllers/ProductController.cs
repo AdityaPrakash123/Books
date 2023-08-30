@@ -51,7 +51,17 @@ namespace Books.Areas.Admin.Controllers
                 _productRepository.Save();
                 return RedirectToAction("Index");
             }
-            return View(productVM);
+            else
+            {
+                IEnumerable<SelectListItem> CategoryList = _categoryRepository.GetAll().Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                });
+
+                productVM.CategoryList = CategoryList;
+                return View(productVM);
+            }
         }
 
         public IActionResult Edit(int id)
@@ -91,7 +101,5 @@ namespace Books.Areas.Admin.Controllers
             _productRepository.Save();
             return RedirectToAction("Index");
         }
-
-
     }
 }

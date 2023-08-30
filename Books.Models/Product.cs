@@ -21,10 +21,12 @@ namespace Books.Models
         public string Author { get; set; }
         [Required]
         public double Price { get; set; }
+        [Required]
         public int? CategoryId { get; set; }
         // Navigation property to the category table
         [ForeignKey("CategoryId")]
         [ValidateNever]
         public Category Category { get; set; }
+        public string ImageUrl { get; set; }
     }
 }
