@@ -1,0 +1,93 @@
+﻿@model List<Product>
+
+
+<div class="row mb-3">
+    <div class="col-6">
+        <h1>Product List</h1>
+    </div>
+
+    <div class="col-6 text-end">
+        <a class="btn btn-primary" asp-area="Admin" asp-controller="Product" asp-action="Create">Create</a>
+    </div>
+
+</div>
+
+
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>
+                Title
+            </th>
+
+            <th>
+                Description
+            </th>
+
+            <th>
+                ISBN
+            </th>
+
+            <th>
+                Author
+            </th>
+
+            <th>
+                Price
+            </th>
+
+            <th>
+                Category
+            </th>
+
+            <th>
+                Other Options
+            </th>
+            
+
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach(Product product in Model)
+        {
+            <tr>
+                <td>
+                    @product.Title
+                </td>
+
+                <td>
+                    @product.Description
+                </td>
+
+                <td>
+                    @product.ISBN
+                </td>
+
+                <td>
+                    @product.Author
+                </td>
+
+                <td>
+                    @product.Price
+                </td>
+
+                <td>
+
+                </td>
+
+                <td>
+                    <div class="btn-group">
+                        <a class="btn btn-primary mx-2" asp-area="Admin" asp-controller="Product" asp-action="Edit" asp-route-id="@product.Id">Edit</a>
+                        <form asp-area="Admin" asp-controller="Product" asp-action="Delete" asp-route-id="@product.Id">
+                            <button class="btn btn-danger mx-2">Delete</button>
+                        </form>
+                    </div>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+
+</table>

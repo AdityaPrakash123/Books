@@ -1,0 +1,43 @@
+﻿@model Product
+
+<h1>Create Product</h1>
+
+
+
+<form method="post">
+    <div class="mb-2">  
+        <label asp-for="Title"></label>
+        <input class="form-control" asp-for="Title" />
+        <span asp-validation-for="Title"></span>
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="Description"></label>
+        <textarea class="form-control" asp-for="Description"></textarea> 
+        <span asp-validation-for="Description"></span>
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="ISBN"></label>
+        <input class="form-control" asp-for="ISBN" />
+        <span asp-validation-for="ISBN"></span>
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="Author"></label>
+        <input class="form-control" asp-for="Author" />
+        <span asp-validation-for="Author"></span>
+    </div>
+
+    <div class="mb-2">
+        <label asp-for="Price"></label>
+        <input class="form-control" asp-for="Price" />
+        <span asp-validation-for="Price"></span>
+    </div>
+
+    <div class="btn-group">
+        <button type="submit" class="btn btn-primary mx-2">Create</button>
+        <a asp-area="Admin" asp-controller="Product" asp-action="Index" class="btn btn-outline-secondary mx-2">Back to List</a>
+    </div>
+
+</form>

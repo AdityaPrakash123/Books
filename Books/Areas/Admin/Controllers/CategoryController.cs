@@ -2,8 +2,9 @@
 using Books.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Books.Controllers
+namespace Books.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
         private readonly ICategoryRepository _categoryRepository;
@@ -26,7 +27,7 @@ namespace Books.Controllers
         [HttpPost]
         public IActionResult Create(Category category)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _categoryRepository.Add(category);
                 _categoryRepository.Save();
@@ -44,7 +45,7 @@ namespace Books.Controllers
         [HttpPost]
         public IActionResult Edit(Category category)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _categoryRepository.Update(category);
                 _categoryRepository.Save();
