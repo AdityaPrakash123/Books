@@ -1,6 +1,8 @@
 ﻿using Books.DataAccess.Repository.IRepository;
 using Books.Models;
+using Books.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Books.Areas.Admin.Controllers
 {
@@ -8,32 +10,48 @@ namespace Books.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         private readonly IProductRepository _productRepository;
-        public ProductController(IProductRepository productRepository)
+        private readonly ICategoryRepository _categoryRepository;
+        public ProductController(IProductRepository productRepository, ICategoryRepository categoryRepository)
         {
             _productRepository = productRepository;
+            _categoryRepository = categoryRepository;
         }
 
         public IActionResult Index()
         {
             IEnumerable<Product> products = _productRepository.GetAll();
+            // Also need to pass list of Categories
             return View(products);
         }
 
         public IActionResult Create()
         {
-            return View();
+
+            IEnumerable<SelectListItem> CategoryList = _categoryRepository.GetAll().Select(x => new SelectListItem
+            {
+                Text = x.Name,
+                Value = x.Id.ToString()
+            });
+
+            ProductVM productVM = new()
+            {
+                CategoryList = CategoryList,
+                Product = new Product()
+            };
+
+            return View(productVM);
         }
 
         [HttpPost]
-        public IActionResult Create(Product product)
+        public IActionResult Create(ProductVM productVM)
         {
             if(ModelState.IsValid)
             {
-                _productRepository.Add(product);
+                _productRepository.Add(productVM.Product);
                 _productRepository.Save();
                 return RedirectToAction("Index");
             }
-            return View();
+            return View(productVM);
         }
 
         public IActionResult Edit(int id)

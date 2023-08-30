@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -23,6 +24,7 @@ namespace Books.Models
         public int? CategoryId { get; set; }
         // Navigation property to the category table
         [ForeignKey("CategoryId")]
+        [ValidateNever]
         public Category Category { get; set; }
     }
 }
