@@ -1,46 +1,65 @@
-﻿@model Product
+﻿@model ProductVM
 
 <h1>Edit Product</h1>
 
 
+<div class="row">
+    <div class="col-10">
+        <form method="post" enctype="multipart/form-data">
+            <input asp-for="Product.Id" hidden />
 
-<form method="post">
+            <div class="mb-2">
+                <label asp-for="Product.Title"></label>
+                <input class="form-control" asp-for="Product.Title" />
+                <span asp-validation-for="Product.Title"></span>
+            </div>
 
-    <input asp-for="Id" hidden />
+            <div class="mb-2">
+                <label asp-for="Product.Description"></label>
+                <textarea asp-for="Product.Description" class="form-control"></textarea>
+                <span asp-validation-for="Product.Description"></span>
+            </div>
 
-    <div class="mb-2">
-        <label asp-for="Title"></label>
-        <input class="form-control" asp-for="Title" />
-        <span asp-validation-for="Title"></span>
+            <div class="mb-2">
+                <label asp-for="Product.ISBN"></label>
+                <input class="form-control" asp-for="Product.ISBN" />
+                <span asp-validation-for="Product.ISBN"></span>
+            </div>
+
+            <div class="mb-2">
+                <label asp-for="Product.Author"></label>
+                <input class="form-control" asp-for="Product.Author" />
+                <span asp-validation-for="Product.Author"></span>
+            </div>
+
+            <div class="mb-2">
+                <label asp-for="Product.Price"></label>
+                <input class="form-control" asp-for="Product.Price" />
+                <span asp-validation-for="Product.Price"></span>
+            </div>
+
+            <div class="mb-2">
+                <label asp-for="Product.CategoryId">Category</label>
+                <select class="form-select" asp-for="Product.CategoryId" asp-items="@Model.CategoryList">
+                    <option disabled selected>--Select Category</option>
+                </select>
+                <span asp-validation-for="Product.CategoryId"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="Product.ImageUrl"></label>
+                <input type="file" name="file" class="form-control"/>
+            </div>
+
+            <div class="btn-group">
+                <button type="submit" class="btn btn-primary">Edit</button>
+                <a asp-area="Admin" asp-controller="Product" asp-action="Index" class="btn btn-outline-secondary mx-2">Back to List</a>
+            </div>
+
+        </form>
     </div>
 
-    <div class="mb-2">
-        <label asp-for="Description"></label>
-        <textarea asp-for="Description" class="form-control"></textarea>
-        <span asp-validation-for="Description"></span>
+    <div class="col-2">
+        <img src="@Model.Product.ImageUrl" style="width: 100%; border-radius: 5px; border: 1px solid #bbb9b9" />
     </div>
-
-    <div class="mb-2">
-        <label asp-for="ISBN"></label>
-        <input class="form-control" asp-for="ISBN" />
-        <span asp-validation-for="ISBN"></span>
-    </div>
-
-    <div class="mb-2">
-        <label asp-for="Author"></label>
-        <input class="form-control" asp-for="Author" />
-        <span asp-validation-for="Author"></span>
-    </div>
-
-    <div class="mb-2">
-        <label asp-for="Price"></label>
-        <input class="form-control" asp-for="Price" />
-        <span asp-validation-for="Price"></span>
-    </div>
-
-    <div class="btn-group">
-        <button type="submit" class="btn btn-primary mx-2">Edit</button>
-        <a asp-area="Admin" asp-controller="Product" asp-action="Index" class="btn btn-outline-secondary mx-2">Back to List</a>
-    </div>
-
-</form>
+</div>

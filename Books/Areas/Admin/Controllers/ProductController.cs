@@ -11,10 +11,12 @@ namespace Books.Areas.Admin.Controllers
     {
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
-        public ProductController(IProductRepository productRepository, ICategoryRepository categoryRepository)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public ProductController(IProductRepository productRepository, ICategoryRepository categoryRepository, IWebHostEnvironment webHostEnvironment)
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public IActionResult Index()
@@ -24,16 +26,16 @@ namespace Books.Areas.Admin.Controllers
             return View(products);
         }
 
+
         public IActionResult Create()
         {
-
             IEnumerable<SelectListItem> CategoryList = _categoryRepository.GetAll().Select(x => new SelectListItem
             {
                 Text = x.Name,
                 Value = x.Id.ToString()
             });
 
-            ProductVM productVM = new()
+            ProductVM productVM = new ProductVM
             {
                 CategoryList = CategoryList,
                 Product = new Product()
@@ -43,10 +45,24 @@ namespace Books.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(ProductVM productVM)
+        public IActionResult Create(ProductVM productVM, IFormFile? file)  // The file uploaded is received here and it must be uploaded in the images/product folder
         {
             if(ModelState.IsValid)
             {
+                string wwwRootPath = _webHostEnvironment.WebRootPath; // Path of the wwwrootfolder
+                if (file != null)
+                {
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName); // Random image name
+                    string productPath = Path.Combine(wwwRootPath, @"images\product"); // This is the path of the product folder where the file should be uploaded
+
+                    using (FileStream fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream); // Copies the file to the location
+                    }
+
+                    productVM.Product.ImageUrl = @"\images\product\" + fileName;
+                }
+                
                 _productRepository.Add(productVM.Product);
                 _productRepository.Save();
                 return RedirectToAction("Index");
@@ -72,25 +88,74 @@ namespace Books.Areas.Admin.Controllers
             }
 
             Product product = _productRepository.Get(u => u.Id == id);
-            
-            if(product == null)
+
+            if (product == null)
             {
                 return NotFound();
             }
-            
-            return View(product);
+
+            IEnumerable<SelectListItem> CategoryList = _categoryRepository.GetAll().Select(x => new SelectListItem
+            {
+                Text= x.Name,
+                Value = x.Id.ToString()
+            });
+
+
+            ProductVM productVM = new ProductVM
+            {
+                CategoryList = CategoryList,
+                Product = product
+
+            };
+                                    
+            return View(productVM);
         }
 
         [HttpPost]
-        public IActionResult Edit(Product product)
+        public IActionResult Edit(ProductVM productVM, IFormFile? file)
         {
             if (ModelState.IsValid)
             {
-                _productRepository.Update(product);
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+                if (file != null)
+                {
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string productPath = Path.Combine(wwwRootPath, @"images\product");
+
+                    if (!string.IsNullOrEmpty(productVM.Product.ImageUrl))
+                    {
+                        // delete the old image
+                        var oldImagePath = Path.Combine(productPath,fileName);
+
+                        if(System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+
+                    }
+
+                    using (FileStream fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                    productVM.Product.ImageUrl = @"\images\product\" + fileName;
+                }
+                                                
+                _productRepository.Update(productVM.Product);
                 _productRepository.Save();
                 return RedirectToAction("Index");
             }
-            return View();
+            else
+            {
+                IEnumerable<SelectListItem> CategoryList = _categoryRepository.GetAll().Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                });
+
+                productVM.CategoryList = CategoryList;
+                return View(CategoryList);
+            }
         }
 
         [HttpPost]
