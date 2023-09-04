@@ -7,14 +7,14 @@
         <div class="col-lg-3 col-sm-6">
            <div class="row p-2">
                 <div class="card border-0 p-3 shadow border-top border-5 rounded">
-                    <img src="@product.ImageUrl" class="card-img-top rounded" style="height: 274px; width: 274px">
+                    <img src="@product.ImageUrl" class="card-img-top rounded" style="height: 274px; width: 274px" draggable="false">
                     <div class="card-body pb-0">
-                        <div class="pl-1">
-                            <p class="text-center">Price: @product.Price.ToString("c");</p>
-                        </div>
                         <div class="pl-1">
                             <p class="card-title h5 text-dark opacity-75 text-uppercase text-center">@product.Title</p>
                             <p class="card-title text-warning text-center">By @product.Author</p>
+                        </div>
+                        <div class="pl-1">
+                            <p class="text-center">Price: @product.Price.ToString("c");</p>
                         </div>
                     </div>
                     <a class="btn btn-primary" asp-area="Customer" asp-controller="Home" asp-action="Details" asp-route-id="@product.Id">Details</a>
