@@ -1,93 +1,109 @@
 ﻿@model List<Product>
 
 
-<div class="row mb-3">
-    <div class="col-6">
-        <h1>Product List</h1>
+<div class="container">
+    <div class="row mb-3">
+        <div class="col-6">
+            <h1>Product List</h1>
+            <input id="input" type="text" placeholder="Search for any of the columns" class="form-control" />
+        </div>
+
+        <div class="col-6 text-end">
+            <a class="btn btn-primary" asp-area="Admin" asp-controller="Product" asp-action="Create">Create</a>
+        </div>
+
     </div>
 
-    <div class="col-6 text-end">
-        <a class="btn btn-primary" asp-area="Admin" asp-controller="Product" asp-action="Create">Create</a>
-    </div>
-
-</div>
 
 
-
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>
-                Title
-            </th>
-
-            <th>
-                Description
-            </th>
-
-            <th>
-                ISBN
-            </th>
-
-            <th>
-                Author
-            </th>
-
-            <th>
-                Price
-            </th>
-
-            <th>
-                Category
-            </th>
-
-            <th>
-                Other Options
-            </th>
-            
-
-        </tr>
-    </thead>
-
-    <tbody>
-        @foreach(Product product in Model)
-        {
+    <table class="table table-bordered table-striped">
+        <thead>
             <tr>
-                <td>
-                    @product.Title
-                </td>
+                <th>
+                    Title
+                </th>
 
-                <td>
-                    @product.Description
-                </td>
+                <th>
+                    Description
+                </th>
 
-                <td>
-                    @product.ISBN
-                </td>
+                <th>
+                    ISBN
+                </th>
 
-                <td>
-                    @product.Author
-                </td>
+                <th>
+                    Author
+                </th>
 
-                <td>
-                    @product.Price
-                </td>
+                <th>
+                    Price
+                </th>
 
-                <td>
-                    @*@product.Category.Name*@
-                </td>
+                <th>
+                    Category
+                </th>
 
-                <td>
-                    <div class="btn-group">
-                        <a class="btn btn-primary mx-2" asp-area="Admin" asp-controller="Product" asp-action="Edit" asp-route-id="@product.Id">Edit</a>
-                        <form asp-area="Admin" asp-controller="Product" asp-action="Delete" asp-route-id="@product.Id">
-                            <button class="btn btn-danger mx-2">Delete</button>
-                        </form>
-                    </div>
-                </td>
+                <th>
+                    Other Options
+                </th>
+
 
             </tr>
-        }
-    </tbody>
+        </thead>
 
-</table>
+        <tbody id="myTable">
+            @foreach (Product product in Model)
+            {
+                <tr>
+                    <td>
+                        @product.Title
+                    </td>
+
+                    <td>
+                        @product.Description
+                    </td>
+
+                    <td>
+                        @product.ISBN
+                    </td>
+
+                    <td>
+                        @product.Author
+                    </td>
+
+                    <td>
+                        @product.Price
+                    </td>
+
+                    <td>
+                        @product.Category.Name
+                    </td>
+
+                    <td>
+                        <div class="btn-group">
+                            <a class="btn btn-primary mx-2" asp-area="Admin" asp-controller="Product" asp-action="Edit" asp-route-id="@product.Id">Edit</a>
+                            <form asp-area="Admin" asp-controller="Product" asp-action="Delete" asp-route-id="@product.Id">
+                                <button class="btn btn-danger mx-2">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function(){
+        $("#input").on("keyup", function(){
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function(){
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>

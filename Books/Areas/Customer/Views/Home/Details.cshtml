@@ -1,0 +1,39 @@
+﻿@model Product
+
+
+<div class="row">
+    <h1 class="text-center">@Model.Title</h1>
+    <h5 class="text-center">By @Model.Title</h5>
+    <div class="mb-3">
+        <a class="btn btn-primary" asp-action="Index">Back To Books</a>
+    </div>
+</div>
+
+<div>
+    <form method="post">
+        <div class="row rounded pt-4">
+            <div class="col-6">
+                <img style="width: 400px; height: 500px; border: 2px solid black" src="@Model.ImageUrl" class="rounded" />
+            </div>
+
+            <div class="col-6">
+                <h5 class="mb-3">
+                    <span>Category:</span> @Model.Category.Name
+                </h5>
+                <h5 class="mb-3">
+                    <span>ISBN:</span> @Model.ISBN
+                </h5>
+                <div class="input-group d-inline">
+                    <label class="p-2 mb-3" style="background-color: black;color:white; margin-right:0px">Count</label>
+                    <input type="number" placeholder="0" style="height: 40px;margin-left:-5px;padding-left:5px" />
+                </div>
+                <h5 class="mb-3">
+                    <span>Price:</span> @Model.Price.ToString("c");
+                </h5>
+                <div class="mt-3">
+                    <button class="btn btn-primary" type="submit" disabled>Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

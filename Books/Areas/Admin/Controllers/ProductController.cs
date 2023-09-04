@@ -80,6 +80,13 @@ namespace Books.Areas.Admin.Controllers
             }
         }
 
+        public IActionResult Details(int id)
+        {
+            Product product = _productRepository.Get(x => x.Id == id);
+            return View(product);
+        }
+
+
         public IActionResult Edit(int id)
         {
             if(id == null || id == 0)
@@ -125,7 +132,7 @@ namespace Books.Areas.Admin.Controllers
                     if (!string.IsNullOrEmpty(productVM.Product.ImageUrl))
                     {
                         // delete the old image
-                        var oldImagePath = Path.Combine(productPath,fileName);
+                        var oldImagePath = Path.Combine(wwwRootPath,productVM.Product.ImageUrl.TrimStart('\\'));
 
                         if(System.IO.File.Exists(oldImagePath))
                         {
@@ -161,7 +168,21 @@ namespace Books.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Delete(int id)
         {
+
             Product product = _productRepository.Get(u => u.Id == id);
+
+            string wwwRootPath = _webHostEnvironment.WebRootPath;
+
+            if(!String.IsNullOrEmpty(product.ImageUrl))
+            {
+                var oldImagePath = Path.Combine(wwwRootPath, product.ImageUrl.TrimStart('\\'));
+
+                if (System.IO.File.Exists(oldImagePath))
+                {
+                    System.IO.File.Delete(oldImagePath);
+                }
+            }
+
             _productRepository.Remove(product);
             _productRepository.Save();
             return RedirectToAction("Index");
