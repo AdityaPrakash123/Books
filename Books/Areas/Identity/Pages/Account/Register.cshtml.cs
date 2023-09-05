@@ -111,7 +111,7 @@ namespace Books.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            // When the page loads check if the roles exist in the database, if they don't add them to the database
+            // When the page loads check if the roles exist in the database, if they don't add them to the database  
             string Customer = "Customer";
             string Admin = "Admin";
 
@@ -131,7 +131,8 @@ namespace Books.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
-
+                user.Name = Input.Name;
+                user.EmailConfirmed = true;
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -151,7 +152,6 @@ namespace Books.Areas.Identity.Pages.Account
             }
             return Page();
         }
-
 
         private ApplicationUser CreateUser()
         {
@@ -176,4 +176,4 @@ namespace Books.Areas.Identity.Pages.Account
             return (IUserEmailStore<IdentityUser>)_userStore;
         }
     }
-}
+} 
