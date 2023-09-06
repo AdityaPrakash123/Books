@@ -1,7 +1,9 @@
 ﻿using Books.DataAccess.Repository.IRepository;
 using Books.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace Books.Areas.Customer.Controllers
 {
@@ -37,6 +39,21 @@ namespace Books.Areas.Customer.Controllers
             return View(shoppingCart);
         }
 
+        [HttpPost]
+        [Authorize]
+        public IActionResult Details(ShoppingCart shoppingCart)
+        {
+            // When adding the shopping cart to the shopping cart table, the id of the user who is signed in is required
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            shoppingCart.ApplicationUserId = userId;
+
+            _shoppingCartRepository.Add(shoppingCart);
+            _shoppingCartRepository.Save();
+            return View(shoppingCart);
+        }
+
+        
         public IActionResult Privacy()
         {
             return View();
