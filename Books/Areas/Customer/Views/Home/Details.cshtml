@@ -1,9 +1,9 @@
-﻿@model Product
+﻿@model ShoppingCart
 
 
 <div class="row">
-    <h1 class="text-center">@Model.Title</h1>
-    <h5 class="text-center">By @Model.Title</h5>
+    <h1 class="text-center">@Model.Product.Title</h1>
+    <h5 class="text-center">By @Model.Product.Title</h5>
     <div class="mb-3">
         <a class="btn btn-primary" asp-action="Index">Back To Books</a>
     </div>
@@ -13,31 +13,30 @@
     <form method="post">
         <div class="row rounded pt-4">
             <div class="col-6">
-                <img style="width: 400px; height: 500px; border: 2px solid black" src="@Model.ImageUrl" class="rounded" draggable="false" />
+                <img style="width: 400px; height: 500px; border: 2px solid black" src="@Model.Product.ImageUrl" class="rounded" draggable="false" />
             </div>
 
             <div class="col-6">
                 <h5 class="mb-3">
-                    <span>Category:</span> @Model.Category.Name
+                    <span>Category:</span> @Model.Product.Category.Name
                 </h5>
                 <h5 class="mb-3">
-                    <span>ISBN:</span> @Model.ISBN
+                    <span>ISBN:</span> @Model.Product.ISBN
                 </h5>
                 <h5 class="mb-3">
-                    <span>Price:</span> @Model.Price.ToString("c");
+                    <span>Price:</span> @Model.Product.Price.ToString("c");
                 </h5>
                 
                 <p>
-                    @Model.Description
+                    @Model.Product.Description
                 </p>
 
-
                 <div class="input-group d-inline">
-                    <label class="p-2 mb-3" style="background-color: black;color:white; margin-right:0px">Count</label>
-                    <input type="number" placeholder="0" style="height: 40px;margin-left:-5px;padding-left:5px" />
+                    <label class="p-2 mb-3" asp-for="Count" style="background-color: black;color:white; margin-right:0px">Count</label>
+                    <input type="number" asp-for="Count" placeholder="0" style="height: 40px;margin-left:-5px;padding-left:5px" />
                 </div>
                 <div class="mt-3">
-                    <button class="btn btn-primary" type="submit" disabled>Add to Cart</button>
+                    <button class="btn btn-primary" type="submit">Add to Cart</button>
                 </div>
             </div>
         </div>

@@ -10,11 +10,13 @@ namespace Books.Areas.Customer.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IProductRepository _productRepository;
+        private readonly IShoppingCartRepository _shoppingCartRepository;
 
-        public HomeController(ILogger<HomeController> logger, IProductRepository productRepository)
+        public HomeController(ILogger<HomeController> logger, IProductRepository productRepository, IShoppingCartRepository shoppingCartRepository)
         {
             _logger = logger;
             _productRepository = productRepository;
+            _shoppingCartRepository = shoppingCartRepository;
         }
 
         public IActionResult Index()
@@ -26,7 +28,13 @@ namespace Books.Areas.Customer.Controllers
         public IActionResult Details(int id)
         {
             Product product = _productRepository.Get(x => x.Id == id);
-            return View(product);
+            ShoppingCart shoppingCart = new()
+            {
+                Product = product,
+                Count = 1,
+                ProductId = id
+            };
+            return View(shoppingCart);
         }
 
         public IActionResult Privacy()

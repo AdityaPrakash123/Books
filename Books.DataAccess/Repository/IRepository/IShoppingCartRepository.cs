@@ -8,12 +8,11 @@ using System.Threading.Tasks;
 
 namespace Books.DataAccess.Repository.IRepository
 {
-    public interface ICategoryRepository : IRepository<Category>
+    public interface IShoppingCartRepository : IRepository<ShoppingCart>
     {
-        // Update and Save
-        Category Get(Expression<Func<Category, bool>> filter);
-        IEnumerable<Category> GetAll();
-        void Update(Category category);
+        ShoppingCart Get(Expression<Func<ShoppingCart, bool>> filter);
+        IEnumerable<ShoppingCart> GetAll();
+        void Update(ShoppingCart shoppingCart);
         void Save();
     }
 }
