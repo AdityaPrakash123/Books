@@ -48,9 +48,13 @@ namespace Books.Areas.Customer.Controllers
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
             shoppingCart.ApplicationUserId = userId;
 
+            
+            
             _shoppingCartRepository.Add(shoppingCart);
             _shoppingCartRepository.Save();
-            return View(shoppingCart);
+            
+
+            return RedirectToAction("Index");
         }
 
         

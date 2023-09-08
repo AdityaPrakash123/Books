@@ -12,7 +12,7 @@ namespace Books.DataAccess.Repository
 {
     public class ShoppingCartRepository : Repository<ShoppingCart>, IShoppingCartRepository
     {
-        public ApplicationDbContext _db { get; set; }
+        private readonly ApplicationDbContext _db;
         public ShoppingCartRepository(ApplicationDbContext db) : base(db)
         {
             _db = db;
@@ -35,7 +35,7 @@ namespace Books.DataAccess.Repository
 
         public void Save()
         {
-            _db.SaveChanges();     
+            _db.SaveChanges();
         }
     }
 }
