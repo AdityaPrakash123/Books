@@ -10,7 +10,7 @@ namespace Books.DataAccess.Repository.IRepository
 {
     public interface IShoppingCartRepository : IRepository<ShoppingCart>
     {
-        ShoppingCart Get(Expression<Func<ShoppingCart, bool>> filter);
+        ShoppingCart Get(Expression<Func<ShoppingCart, bool>> filter, bool tracked = false);
         IEnumerable<ShoppingCart> GetAll();
         void Update(ShoppingCart shoppingCart);
         void Save();

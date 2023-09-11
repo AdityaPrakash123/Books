@@ -44,16 +44,27 @@ namespace Books.Areas.Customer.Controllers
         public IActionResult Details(ShoppingCart shoppingCart)
         {
             // When adding the shopping cart to the shopping cart table, the id of the user who is signed in is required
+            /*var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            shoppingCart.ApplicationUserId = userId;*/
+
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
-            shoppingCart.ApplicationUserId = userId;
+            shoppingCart.ApplicationUserId = userId; // Adding the user which added the product
 
-            
-            
-            _shoppingCartRepository.Add(shoppingCart);
+            ShoppingCart cart = _shoppingCartRepository.Get(u => u.ApplicationUserId == userId && u.ProductId == shoppingCart.ProductId);
+
+            if (cart != null)
+            {
+                cart.Count += shoppingCart.Count;
+                _shoppingCartRepository.Update(cart);
+            }
+            else
+            {
+                _shoppingCartRepository.Add(shoppingCart);
+
+            }
             _shoppingCartRepository.Save();
-            
-
             return RedirectToAction("Index");
         }
 

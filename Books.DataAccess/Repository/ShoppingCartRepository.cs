@@ -1,6 +1,7 @@
 ﻿using Books.DataAccess.Data;
 using Books.DataAccess.Repository.IRepository;
 using Books.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,9 +19,15 @@ namespace Books.DataAccess.Repository
             _db = db;
         }
 
-        public ShoppingCart Get(Expression<Func<ShoppingCart, bool>> filter)
+        public ShoppingCart Get(Expression<Func<ShoppingCart, bool>> filter, bool tracked = false)
         {
-            return _db.ShoppingCarts.Where(filter).FirstOrDefault();
+            IQueryable<ShoppingCart> query = _db.ShoppingCarts;
+            if (!tracked)
+            {
+                query = query.AsNoTracking();
+            }
+            return query.FirstOrDefault(filter);
+            
         }
 
         public IEnumerable<ShoppingCart> GetAll()
