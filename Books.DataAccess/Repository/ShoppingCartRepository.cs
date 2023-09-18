@@ -26,9 +26,9 @@ namespace Books.DataAccess.Repository
             return query.FirstOrDefault(filter);
         }
 
-        public IEnumerable<ShoppingCart> GetAll()
+        public IEnumerable<ShoppingCart> GetAll(Expression<Func<ShoppingCart, bool>> filter)
         {
-            return _db.ShoppingCarts.ToList();
+            return _db.ShoppingCarts.Where(filter).Include(u => u.Product);
         }
 
         public void Update(ShoppingCart shoppingCart)

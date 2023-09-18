@@ -11,7 +11,7 @@ namespace Books.DataAccess.Repository.IRepository
     public interface IShoppingCartRepository : IRepository<ShoppingCart>
     {
         ShoppingCart Get(Expression<Func<ShoppingCart, bool>> filter);
-        IEnumerable<ShoppingCart> GetAll();
+        IEnumerable<ShoppingCart> GetAll(Expression<Func<ShoppingCart, bool>> filter);
         void Update(ShoppingCart shoppingCart);
         void Save();
     }
