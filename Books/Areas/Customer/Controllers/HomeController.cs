@@ -56,11 +56,13 @@ namespace Books.Areas.Customer.Controllers
 
             if (cart != null)
             {
+                // shopping cart already exists
                 cart.Count += shoppingCart.Count;
                 _shoppingCartRepository.Update(cart);
             }
             else
             {
+                // add cart
                 _shoppingCartRepository.Add(shoppingCart);
 
             }

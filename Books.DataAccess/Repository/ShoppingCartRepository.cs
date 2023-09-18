@@ -19,15 +19,11 @@ namespace Books.DataAccess.Repository
             _db = db;
         }
 
-        public ShoppingCart Get(Expression<Func<ShoppingCart, bool>> filter, bool tracked = false)
+        public ShoppingCart Get(Expression<Func<ShoppingCart, bool>> filter)
         {
             IQueryable<ShoppingCart> query = _db.ShoppingCarts;
-            if (!tracked)
-            {
-                query = query.AsNoTracking();
-            }
+            query = query.AsNoTracking();
             return query.FirstOrDefault(filter);
-            
         }
 
         public IEnumerable<ShoppingCart> GetAll()
