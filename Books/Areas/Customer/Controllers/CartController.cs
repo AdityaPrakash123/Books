@@ -19,7 +19,6 @@ namespace Books.Areas.Customer.Controllers
             _shoppingCartRepository = shoppingCartRepository;
         }
 
-		 
 		public IActionResult Index()
 		{
 			var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -41,9 +40,41 @@ namespace Books.Areas.Customer.Controllers
 
 			return View(shoppingCart);
 
-			
         }
 
-		
-	}
+		public IActionResult Add(int cartId)
+		{
+
+			var cartFromDb = _shoppingCartRepository.Get(u => u.Id == cartId);
+			cartFromDb.Count++;
+			_shoppingCartRepository.Update(cartFromDb);
+			_shoppingCartRepository.Save();
+			return RedirectToAction("Index");
+		}
+
+        public IActionResult Minus(int cartId)
+        {
+
+            var cartFromDb = _shoppingCartRepository.Get(u => u.Id == cartId);
+			if(cartFromDb.Count <= 1)
+			{
+                _shoppingCartRepository.Remove(cartFromDb);
+			}
+			else
+			{
+                cartFromDb.Count--;
+                _shoppingCartRepository.Update(cartFromDb);
+            }
+            _shoppingCartRepository.Save();
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Remove(int cartId)
+        {
+            var cartFromDb = _shoppingCartRepository.Get(u => u.Id == cartId);
+            _shoppingCartRepository.Remove(cartFromDb);
+            _shoppingCartRepository.Save();
+            return RedirectToAction("Index");
+        }
+    }
 }

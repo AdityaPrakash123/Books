@@ -22,7 +22,6 @@ namespace Books.DataAccess.Repository
         public ShoppingCart Get(Expression<Func<ShoppingCart, bool>> filter)
         {
             IQueryable<ShoppingCart> query = _db.ShoppingCarts;
-            query = query.AsNoTracking();
             return query.FirstOrDefault(filter);
         }
 
